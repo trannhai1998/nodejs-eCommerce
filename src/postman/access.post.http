@@ -1,0 +1,14 @@
+@URL_DEV = http://localhost:3000/v1/api
+
+// Signup
+POST {{URL_DEV}}/shop/signup
+# POST {{URL_DEV}}/shop/login
+
+Content-Type: application/json
+x-api-key: b40eba8b9bba2ed56f35f03a9563f31536caa6a1224ee09c011a7f4d5810eb5634b37852ea25d66b9a53ff81cdccd5d2ba8e26d5741ce03eecc72b9120b20e9c
+
+{
+    "name": "James Tran",
+    "email": "trannamhai013.dn@gmail.com",
+    "password": "namvip123"
+}

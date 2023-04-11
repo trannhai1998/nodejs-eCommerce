@@ -18,7 +18,6 @@ class KeyTokenService {
             }, options = { upsert: true, new: true }
 
             const tokens = await keyTokenModel.findOneAndUpdate(filter, update, options)
-            console.log('Tokens: ', tokens);
             return tokens ? tokens?.publicKey : null
         } catch (err) {
             return err
@@ -26,7 +25,6 @@ class KeyTokenService {
     }
 
     static findByUserId = async (userId) => {
-        console.log('User Id:', userId)
         return await keyTokenModel.findOne({ user: new Types.ObjectId(userId) }).lean()
     }
 

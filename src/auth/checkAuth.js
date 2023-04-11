@@ -33,9 +33,6 @@ const apiKey = async (req, res, next) => {
 
 const permission = (permission) => {
     return (req, res, next) => {
-        console.log('Run here ====================')
-        console.log('Permission::', permission);
-
         if (!req?.objKey.permissions) {
             return res?.status(403).json({
                 message: 'Permissions Denied'
@@ -51,8 +48,6 @@ const permission = (permission) => {
                 message: 'Permissions Denied'
             })
         }
-        console.log('run here');
-
         return next();
     }
 }

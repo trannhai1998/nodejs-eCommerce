@@ -12,14 +12,9 @@ const HEADER = {
 
 const createTokenPair = async (payload, publicKey, privateKey) => {
     try {
-        console.log('Run here 1', publicKey)
-        console.log(privateKey)
-
         const accessToken = await JWT.sign(payload, publicKey, {
             expiresIn: '2 days'
         })
-        console.log('Run here 1')
-
         const refreshToken = await JWT.sign(payload, privateKey, {
             expiresIn: '7 days',
         })
@@ -32,9 +27,6 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
                 console.log(`decode verify:: ${decode.toString()}`)
             }
         })
-
-        console.log(accessToken, refreshToken);
-
         return { accessToken, refreshToken }
     } catch (error) {
         console.log(error);
@@ -57,17 +49,12 @@ const authentication = asyncHandler(async (req, res, next) => {
     //2
     const keyStore = await findByUserId(userId);
     if (!keyStore) throw new NotFoundError('Not Found KeyStore');
-    console.log('KeyStore', keyStore);
     //3
     const accessToken = req.headers[HEADER.AUTHORIZATION];
     if (!accessToken) throw new AuthFailureError('Invalid Request');
-
-    console.log('accessToken:: ',accessToken);
     try {
         const decodeUser = JWT.verify(accessToken, keyStore.publicKey)
-        console.log('decodeUser: ',decodeUser)
         if (userId !== decodeUser?.userId) throw AuthFailureError('Invalid User')
-        console.log('Run here');
         req.keyStore = keyStore;
         return next()
     } catch(error) {

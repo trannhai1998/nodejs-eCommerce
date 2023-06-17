@@ -21,8 +21,8 @@ var keyTokenSchema = new mongoose.Schema({
         required: true
     },
     refreshTokenUsed: {
-        type: Array,
-        default: []
+        type: Array, // RT used
+        default: [] 
     },
     refreshToken: {
         type: String,

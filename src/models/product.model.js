@@ -27,7 +27,7 @@ const clothingSchema = new Schema({
     brand: { type: String, require: true },
     size: String,
     material: String,
-
+    product_shop: { type: Schema.Types.ObjectId, ref: 'Shop' }
 }, {
     collection: COLLECTION_CLOTHING_NAME,
     timestamps: true,
@@ -40,9 +40,21 @@ const electronicSchema = new Schema({
     manufacture: { type: String, require: true },
     model: String,
     color: String,
-
+    product_shop: { type: Schema.Types.ObjectId, ref: 'Shop' }
 }, {
     collection: COLLECTION_ELECTRONIC_NAME,
+    timestamps: true,
+})
+
+const DOCUMENT_FURNITURE_NAME = 'Furniture'
+const COLLECTION_FURNITURE_NAME = 'Furniture'
+const furnitureSchema = new Schema({
+    manufacture: { type: String, require: true },
+    model: String,
+    color: String,
+    product_shop: { type: Schema.Types.ObjectId, ref: 'Shop' }
+}, {
+    collection: COLLECTION_FURNITURE_NAME,
     timestamps: true,
 })
 
@@ -51,4 +63,6 @@ module.exports = {
     productModel: mongoose.model(DOCUMENT_PRODUCT_NAME, ProductSchema),
     clothingModel: mongoose.model(DOCUMENT_CLOTHING_NAME, clothingSchema),
     electronicModel: mongoose.model(DOCUMENT_ELECTRONIC_NAME, electronicSchema),
+    furnitureModel: mongoose.model(DOCUMENT_FURNITURE_NAME, furnitureSchema),
+
 }

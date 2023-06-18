@@ -46,6 +46,22 @@ class AccessController {
         }).send(res)
     }
 
+    findAllProducts = async (req, res, next) => {
+        console.log('Params::: ', req?.query);
+        new SuccessResponse({
+            message: 'Find list All Product Success',
+            metadata: await ProductServiceV2.findAllProducts(req?.query)
+        }).send(res)
+    }
+
+    findProduct = async (req, res, next) => {
+        console.log('Params:::', req?.params);
+        new SuccessResponse({
+            message: 'Find One Product Success',
+            metadata: await ProductServiceV2.findProduct(req?.params)
+        }).send(res)
+    }
+
     // PUT
     publishProductByShop = async (req, res, next) => {
         new SuccessResponse({

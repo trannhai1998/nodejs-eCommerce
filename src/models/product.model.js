@@ -1,6 +1,7 @@
 'use strict'
 const mongoose = require('mongoose');
 const { model, Schema } = mongoose // Erase if already required
+const slugify = require('slugify');
 
 const DOCUMENT_PRODUCT_NAME = 'Product'
 const COLLECTION_PRODUCT_NAME = 'Products'
@@ -10,15 +11,48 @@ const ProductSchema = new mongoose.Schema({
     product_name: { type: String, required: true },
     product_thumb: { type: String, required: true },
     product_description: String,
+    product_slug: String, //day-la-slug: quan-jean-cao-cap
     product_price: { type: Number, required: true },
     product_quantity: { type: Number, required: true },
     product_type: { type: String, required: true, enum: ['Electronics', 'Clothing', 'Furniture'] },
     product_shop: String, // {type: Schema.Types.ObjectId, ref: 'User'},
-    product_attributes: { type: Schema.Types.Mixed, required: true }
+    product_attributes: { type: Schema.Types.Mixed, required: true },
+    product_ratingsAverage: {
+        type: Number,
+        default: 4.5,
+        min: [1, 'Rating must be above 1.0'],
+        max: [5, 'Rating must be lower 5'],
+        // Rounded 4.34445 => 4.3
+        set: (val) => Math.round(val * 10) / 10
+    },
+    // types product
+    product_variations: { type: Array, default: [] },
+    isDraft: {
+        type: Boolean,
+        default: true,
+        index: true,
+        select: false, // When FindOne,Find... not return this field
+    },
+    isPublished: {
+        type: Boolean,
+        default: false,
+        index: true,
+        select: false, // When FindOne,Find... not return this field
+    }
 }, {
     timestamps: true,
     collection: COLLECTION_PRODUCT_NAME
 });
+// create index for search
+ProductSchema.index({
+    product_name: 'text',
+    product_description: 'text'
+})
+// Document middleware: runs before .save() and .create()...
+ProductSchema.pre('save', function (next) {
+    this.product_slug = slugify(this.product_name, { lower: true });
+    next();
+})
 
 // Define the product type = "Clothing"
 const DOCUMENT_CLOTHING_NAME = 'Clothing'

@@ -17,13 +17,15 @@ router.use(authenticationV2)
 
 // QUERY
 router.get('/draft/all', asyncHandler(productController.getAllDraftsForShop))
-router.get('/publish/all', asyncHandler(productController.getAllPublishesForShop))
+router.get('/published/all', asyncHandler(productController.getAllPublishesForShop))
 
 // PUT
 router.post('/new', asyncHandler(productController.createProduct))
 
 router.post('/published/:id', asyncHandler(productController.publishProductByShop))
 router.post('/unpublished/:id', asyncHandler(productController.unpublishProductByShop))
+// PATCH
+router.patch('/update/:productId', asyncHandler(productController.updateProduct))
 
 
 module.exports = router;

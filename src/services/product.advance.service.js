@@ -23,6 +23,8 @@ const {
 	updateNestedObjectParse,
 } = require('../utils/index');
 
+const { insertInventory } = require('../models/repositories/inventory.repo');
+
 // Define Factory class to create product
 class ProductFactory {
 	/*
@@ -131,7 +133,18 @@ class Product {
 
 	// create new product
 	async createProduct(product_id) {
-		return await productModel.create({ ...this, product_id });
+		const newProduct = await productModel.create({ ...this, product_id });
+
+		if (newProduct) {
+			// Add product_stock in inventory collection
+			await insertInventory({
+				productId: newProduct?._id,
+				shopId: this.product_shop,
+				stock: this.product_quantity,
+			});
+		}
+
+        return newProduct;
 	}
 
 	// Update Product
@@ -165,10 +178,8 @@ class Clothing extends Product {
 		 * }
 		 */
 		// 1. remove attr has null undefined
-        const updateNested = updateNestedObjectParse(this)
-        console.log('Update Nested:::', updateNested);
+		const updateNested = updateNestedObjectParse(this);
 		const objectParams = removeUndefinedObject(updateNested);
-        console.log('Object Params:::', objectParams);
 		// 2. check where to update
 		if (objectParams.product_attributes) {
 			// update Child
@@ -184,7 +195,7 @@ class Clothing extends Product {
 	}
 }
 
-class Electronic extends Product {
+class Electronics extends Product {
 	async createProduct() {
 		const newElectronic = await electronicModel.create({
 			...this.product_attributes,
@@ -215,7 +226,7 @@ class Furniture extends Product {
 }
 
 // register product types
-ProductFactory.registerProductType('Electronic', Electronic);
+ProductFactory.registerProductType('Electronics', Electronics);
 ProductFactory.registerProductType('Clothing', Clothing);
 ProductFactory.registerProductType('Furniture', Furniture);
 

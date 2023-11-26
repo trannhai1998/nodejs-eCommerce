@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyJWT = exports.authenticationV2 = exports.createTokenPair = void 0;
+exports.HEADER = exports.verifyJWT = exports.authenticationV2 = exports.createTokenPair = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const asyncHandler_1 = require("../helpers/asyncHandler");
 const error_response_1 = require("../core/error.response");
@@ -23,6 +23,7 @@ const HEADER = {
     AUTHORIZATION: 'authorization',
     REFRESH_TOKEN: 'x-rtoken-id',
 };
+exports.HEADER = HEADER;
 const createTokenPair = (payload, publicKey, privateKey) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accessToken = yield jsonwebtoken_1.default.sign(payload, publicKey, {

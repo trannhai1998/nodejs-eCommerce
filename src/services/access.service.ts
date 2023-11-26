@@ -29,9 +29,11 @@ const ROLE_SHOP = {
 
 class AccessService {
 	static logout = async (keyStore): Promise<boolean> => {
+        console.log('Logout')
 		const delKey: boolean = await KeyTokenService.removeKeyById(
 			keyStore._id,
 		);
+        
 		return delKey;
 	};
 

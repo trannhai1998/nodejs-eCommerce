@@ -1,12 +1,10 @@
-'use strict';
-const mongoose = require('mongoose');
-const { model, Schema, Types } = mongoose; // Erase if already required
+import mongoose, { Schema, Types} from 'mongoose';
 
 const DOCUMENT_NAME = 'Discount';
 const COLLECTION_NAME = 'Discounts';
 
 // Declare the Schema of the Mongo model
-var discountSchema = new mongoose.Schema(
+const discountSchema = new mongoose.Schema(
 	{
 		discount_name: { type: String, required: true },
 		discount_description: { type: String, required: true },

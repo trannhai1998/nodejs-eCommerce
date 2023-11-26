@@ -1,5 +1,5 @@
-
 import { getSelectData, unGetSelectData } from '../../utils';
+import DiscountModel from '../discount.model';
 import discountModel from '../discount.model';
 
 interface FindAllDiscountCodesUnselectOptions {
@@ -62,7 +62,15 @@ const findAllDiscountCodesSelect = async ({
 	return documents;
 };
 
+const checkDiscountExists = async (filter: {
+	discount_shopId;
+	discount_code;
+}) => {
+	return await DiscountModel.findOne(filter).lean();
+};
+
 export {
 	findAllDiscountCodesSelect,
 	findAllDiscountCodesUnselect,
+	checkDiscountExists,
 };

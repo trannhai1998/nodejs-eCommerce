@@ -12,7 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insertInventory = void 0;
+exports.reservationInventory = exports.insertInventory = void 0;
+const utils_1 = require("../../utils");
 const inventory_model_1 = __importDefault(require("../inventory.model"));
 const insertInventory = ({ productId, shopId, stock, location = 'unknown', }) => __awaiter(void 0, void 0, void 0, function* () {
     return yield inventory_model_1.default.create({
@@ -23,3 +24,24 @@ const insertInventory = ({ productId, shopId, stock, location = 'unknown', }) =>
     });
 });
 exports.insertInventory = insertInventory;
+const reservationInventory = ({ productId, quantity, cartId }) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = {
+        inventory_productId: (0, utils_1.convertToObjectIdMongodb)(productId),
+        inventory_stock: { $gte: quantity },
+    };
+    const updateSet = {
+        $inc: {
+            inventory_stock: -quantity,
+        },
+        $push: {
+            inventory_reservations: {
+                quantity,
+                cartId,
+                createOn: new Date(),
+            },
+        },
+    };
+    const options = { upsert: true, new: true };
+    return yield inventory_model_1.default.updateOne(query, updateSet, options);
+});
+exports.reservationInventory = reservationInventory;

@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const success_response_1 = require("../core/success.response");
 const access_service_1 = __importDefault(require("../services/access.service"));
+const authUtils_1 = require("../auth/authUtils");
 class AccessController {
     constructor() {
         this.handlerRefreshToken = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
@@ -32,9 +33,10 @@ class AccessController {
             }).send(res);
         });
         this.logout = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            console.log(req.headers);
             new success_response_1.SuccessResponse({
                 message: 'Logout Success',
-                metadata: yield access_service_1.default.logout(req.params.keyStore),
+                metadata: yield access_service_1.default.logout(req.headers[authUtils_1.HEADER.CLIENT_ID]),
             }).send(res);
         });
         this.signUp = (req, res, next) => __awaiter(this, void 0, void 0, function* () {

@@ -8,9 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findAllDiscountCodesUnselect = exports.findAllDiscountCodesSelect = void 0;
+exports.checkDiscountExists = exports.findAllDiscountCodesUnselect = exports.findAllDiscountCodesSelect = void 0;
 const utils_1 = require("../../utils");
+const discount_model_1 = __importDefault(require("../discount.model"));
 const findAllDiscountCodesUnselect = ({ limit = 50, page = 1, sort = 'ctime', filter, unselect, model, }) => __awaiter(void 0, void 0, void 0, function* () {
     const skip = (page - 1) * limit;
     const sortBy = sort === 'ctime' ? { _id: -1 } : { _id: 1 };
@@ -37,3 +41,7 @@ const findAllDiscountCodesSelect = ({ limit = 50, page = 1, sort = 'ctime', filt
     return documents;
 });
 exports.findAllDiscountCodesSelect = findAllDiscountCodesSelect;
+const checkDiscountExists = (filter) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield discount_model_1.default.findOne(filter).lean();
+});
+exports.checkDiscountExists = checkDiscountExists;

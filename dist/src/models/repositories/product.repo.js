@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProductById = exports.findProduct = exports.findAllProducts = exports.searchProductByUser = exports.queryProducts = exports.findAllDraftForShop = exports.unpublishProductByShop = exports.publishProductByShop = void 0;
+exports.checkProductByServer = exports.getProductById = exports.updateProductById = exports.findProduct = exports.findAllProducts = exports.searchProductByUser = exports.queryProducts = exports.findAllDraftForShop = exports.unpublishProductByShop = exports.publishProductByShop = void 0;
 const mongoose_1 = require("mongoose");
 const product_model_1 = require("../product.model");
 const index_1 = require("../../utils/index");
@@ -101,3 +101,22 @@ const updateProductById = (productId, bodyUpdate, model, isNew = true) => __awai
     });
 });
 exports.updateProductById = updateProductById;
+const getProductById = (productId) => __awaiter(void 0, void 0, void 0, function* () {
+    return product_model_1.productModel
+        .findOne({ _id: (0, index_1.convertToObjectIdMongodb)(productId) })
+        .lean();
+});
+exports.getProductById = getProductById;
+const checkProductByServer = (products) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield Promise.all(products.map((product) => __awaiter(void 0, void 0, void 0, function* () {
+        const foundProduct = yield getProductById(product.productId);
+        if (foundProduct) {
+            return {
+                price: foundProduct.product_price,
+                quantity: product.quantity,
+                productId: foundProduct === null || foundProduct === void 0 ? void 0 : foundProduct._id,
+            };
+        }
+    })));
+});
+exports.checkProductByServer = checkProductByServer;

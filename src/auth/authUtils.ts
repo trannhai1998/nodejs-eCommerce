@@ -85,4 +85,4 @@ const verifyJWT = async (token, keySecret) => {
 	return await JWT.verify(token, keySecret);
 };
 
-export { createTokenPair, authenticationV2, verifyJWT };
+export { createTokenPair, authenticationV2, verifyJWT, HEADER};

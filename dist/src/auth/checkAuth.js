@@ -26,8 +26,11 @@ const apiKey = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
             });
         }
         // Check objKey
+        console.log('Key:::', key);
         const objKey = yield (0, apiKey_service_1.findById)(key);
+        console.log(objKey);
         if (!objKey) {
+            console.log('Run here');
             return res === null || res === void 0 ? void 0 : res.status(403).json({
                 message: 'Forbidden Error',
             });

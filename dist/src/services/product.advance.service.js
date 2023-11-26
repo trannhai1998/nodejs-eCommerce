@@ -56,7 +56,7 @@ class ProductFactory {
     }
     static findAllProducts({ limit = 50, sort = 'ctime', page = 1, filter = { isPublished: true }, }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const select = ['product_name', 'product_price', 'product_thumb'];
+            const select = ['product_name', 'product_price', 'product_thumb', 'product_shop'];
             return (0, product_repo_1.findAllProducts)({ limit, sort, page, filter, select });
         });
     }

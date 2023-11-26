@@ -7,7 +7,11 @@ import {
 	clothingModel,
 	furnitureModel,
 } from '../product.model';
-import { getSelectData, unGetSelectData } from '../../utils/index';
+import {
+	convertToObjectIdMongodb,
+	getSelectData,
+	unGetSelectData,
+} from '../../utils/index';
 
 const findAllDraftForShop = async ({ query, limit, skip }) => {
 	return await productModel
@@ -54,7 +58,7 @@ const findAllProducts = async ({ limit, sort, page, filter, select }) => {
 	const skip = (page - 1) * limit;
 	const products = await productModel
 		.find(filter)
-		.sort(sort === 'ctime' ? { _id: -1} : { _id: 1 })
+		.sort(sort === 'ctime' ? { _id: -1 } : { _id: 1 })
 		.skip(skip)
 		.limit(limit)
 		.select(getSelectData(select))
@@ -112,6 +116,27 @@ const updateProductById = async (
 	});
 };
 
+const getProductById = async (productId) => {
+	return productModel
+		.findOne({ _id: convertToObjectIdMongodb(productId) })
+		.lean();
+};
+
+const checkProductByServer = async (products) => {
+	return await Promise.all(
+		products.map(async (product) => {
+			const foundProduct = await getProductById(product.productId);
+			if (foundProduct) {
+				return {
+					price: foundProduct.product_price,
+					quantity: product.quantity,
+					productId: foundProduct?._id,
+				};
+			}
+		}),
+	);
+};
+
 export {
 	publishProductByShop,
 	unpublishProductByShop,
@@ -121,4 +146,6 @@ export {
 	findAllProducts,
 	findProduct,
 	updateProductById,
+	getProductById,
+    checkProductByServer
 };

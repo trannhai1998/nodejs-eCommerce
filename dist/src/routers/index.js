@@ -7,11 +7,19 @@ const express_1 = __importDefault(require("express"));
 const checkAuth_1 = require("../auth/checkAuth");
 const product_1 = __importDefault(require("./product"));
 const access_1 = __importDefault(require("./access"));
+const discount_1 = __importDefault(require("./discount"));
+const cart_1 = __importDefault(require("./cart"));
+const checkout_1 = __importDefault(require("./checkout"));
+const inventory_1 = __importDefault(require("./inventory"));
 const router = express_1.default.Router();
 // Check Api Key
 router.use(checkAuth_1.apiKey);
-// Check permission 
+// Check permission
 router.use((0, checkAuth_1.permission)('0000'));
+router.use('/v1/api/cart', cart_1.default);
+router.use('/v1/api/checkout', checkout_1.default);
+router.use('/v1/api/inventory', inventory_1.default);
+router.use('/v1/api/discount', discount_1.default);
 router.use('/v1/api/product', product_1.default);
 router.use('/v1/api', access_1.default);
 exports.default = router;

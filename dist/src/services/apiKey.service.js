@@ -18,7 +18,7 @@ const findById = (key) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     // console.log('Run here');
     // const newKey = await apiKeyModel.create({ key: crypto.randomBytes(64).toString('hex'), permissions: ['0000'] })
-    // console.log(newKey);
+    // console.log('newKey:::', newKey);
     const objKey = yield ((_a = apiKey_model_1.default.findOne({ key, status: true })) === null || _a === void 0 ? void 0 : _a.lean());
     return objKey;
 });

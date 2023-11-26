@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { CREATED, SuccessResponse } from '../core/success.response';
 import AccessService from '../services/access.service';
+import { HEADER } from '../auth/authUtils';
 
 class AccessController {
 	handlerRefreshToken = async (
@@ -25,7 +26,7 @@ class AccessController {
 	): Promise<void> => {
 		new SuccessResponse({
 			metadata: await AccessService.login(req.body),
-		}).send(res);
+		}).send(res);   
 	};
 
 	logout = async (
@@ -33,9 +34,10 @@ class AccessController {
 		res: Response,
 		next: NextFunction,
 	): Promise<void> => {
+        console.log(req.headers)
 		new SuccessResponse({
 			message: 'Logout Success',
-			metadata: await AccessService.logout(req.params.keyStore),
+			metadata: await AccessService.logout(req.headers[HEADER.CLIENT_ID]),
 		}).send(res);
 	};
 

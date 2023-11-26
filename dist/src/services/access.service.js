@@ -31,6 +31,7 @@ class AccessService {
 }
 _a = AccessService;
 AccessService.logout = (keyStore) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('Logout');
     const delKey = yield keyToken_service_1.default.removeKeyById(keyStore._id);
     return delKey;
 });

@@ -5,6 +5,9 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import compression from 'compression';
+import { checkOverload } from './helpers/check.connect';
+import ProductTestService from './tests/product.test';
+import InventoryTestService from './tests/inventory.test';
 
 const app: Application = express();
 
@@ -18,11 +21,14 @@ app.use(
 		extended: true,
 	}),
 );
+// Test pub sub redis
+// require('./tests/inventory.test');
+// const productTest = require('./tests/product.test');
+// ProductTestService.purchaseProduct('product:001', 1);
 
 // Init DB
 require('./dbs/init.mongodb');
 
-import { checkOverload } from './helpers/check.connect';
 checkOverload();
 
 // Init Router

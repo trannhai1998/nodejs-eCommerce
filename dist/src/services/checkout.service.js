@@ -133,7 +133,7 @@ class CheckoutService {
                     yield (0, redis_service_1.releaseLock)(keyLock);
                 }
                 // Check if 1 product out of stock.
-                if (acquireProduct.some(e => !e)) {
+                if (acquireProduct.some((e) => !e)) {
                     throw new error_response_1.BadRequestError('Some Product updated, please go back and confirm your order again!');
                 }
                 const newOrder = yield order_model_1.default.create({
@@ -141,7 +141,7 @@ class CheckoutService {
                     order_checkout: checkout_order,
                     order_shipping: user_address,
                     order_payment: user_payment,
-                    order_products: shop_order_ids_new
+                    order_products: shop_order_ids_new,
                 });
                 // Case 1: If insert successfully => remove product in this cart.
                 if (newOrder) {
@@ -150,6 +150,31 @@ class CheckoutService {
                 return newOrder;
             }
         });
+    }
+    /*
+        1> Query Orders [Users]
+    */
+    static getOrdersByUser() {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
+    /*
+        2> Query Orders Using Id [Users]
+    */
+    static getOneOrderByUser() {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
+    /*
+        3> Cancel Order [Users]
+    */
+    static cancelOrderByUser() {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
+    /*
+        4> Update Order Status  [Shop | Admin]
+        Why Admin ? For update status order to delivering
+    */
+    static updateOrderStatusByShop() {
+        return __awaiter(this, void 0, void 0, function* () { });
     }
 }
 exports.default = CheckoutService;

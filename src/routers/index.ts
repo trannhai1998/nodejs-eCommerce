@@ -6,13 +6,18 @@ import discountRouter from './discount';
 import cartRouter from './cart';
 import checkoutRouter from './checkout';
 import inventoryRouter from './inventory';
+import commentRouter from './comment';
 
+import { pushToLogDiscord } from '../middlewares';
 const router: Router = express.Router();
 
+router.use(pushToLogDiscord);
 // Check Api Key
 router.use(apiKey);
 // Check permission
 router.use(permission('0000'));
+
+router.use('/v1/api/comment', commentRouter)
 
 router.use('/v1/api/cart', cartRouter);
 
@@ -23,6 +28,7 @@ router.use('/v1/api/inventory', inventoryRouter);
 router.use('/v1/api/discount', discountRouter);
 
 router.use('/v1/api/product', productRouter);
+
 
 router.use('/v1/api', accessRouter);
 

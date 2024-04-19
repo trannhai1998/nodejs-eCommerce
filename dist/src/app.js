@@ -10,6 +10,7 @@ const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const helmet_1 = __importDefault(require("helmet"));
 const compression_1 = __importDefault(require("compression"));
+const check_connect_1 = require("./helpers/check.connect");
 const app = (0, express_1.default)();
 // Init Middleware
 app.use((0, morgan_1.default)('dev')); // Show info request (IP, status, request by, request where - Postman, chrome....)
@@ -19,9 +20,12 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({
     extended: true,
 }));
+// Test pub sub redis
+// require('./tests/inventory.test');
+// const productTest = require('./tests/product.test');
+// ProductTestService.purchaseProduct('product:001', 1);
 // Init DB
 require('./dbs/init.mongodb');
-const check_connect_1 = require("./helpers/check.connect");
 (0, check_connect_1.checkOverload)();
 // Init Router
 app.use('/', routers_1.default);

@@ -2,13 +2,11 @@
 
 // Signup
 POST {{URL_DEV}}/shop/signup
-# POST {{URL_DEV}}/shop/login
-
 Content-Type: application/json
-x-api-key: b40eba8b9bba2ed56f35f03a9563f31536caa6a1224ee09c011a7f4d5810eb5634b37852ea25d66b9a53ff81cdccd5d2ba8e26d5741ce03eecc72b9120b20e9c
+x-api-key: 4168a193eb36985e7f9da5a77c315c46aae5f7d5c4dcb2b4f32290ec47fbcbad49ed89b0551dfd5c1eed36ccc7b72bf92a210114cd584e77f72a71da8a845c27
 
 {
     "name": "James Tran",
-    "email": "trannamhai013.dn@gmail.com",
+    "email": "trannamhai.dn@gmail.com",
     "password": "namvip123"
 }

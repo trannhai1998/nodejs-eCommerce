@@ -28,6 +28,12 @@ class CommentController {
                 metadata: yield comment_service_1.default.getCommentsByParentId(req.query),
             }).send(res);
         });
+        this.deleteComment = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            new success_response_1.SuccessResponse({
+                message: 'Delete comment',
+                metadata: yield comment_service_1.default.deleteComment(req.body),
+            }).send(res);
+        });
     }
 }
 exports.default = new CommentController();

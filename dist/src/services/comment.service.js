@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const error_response_1 = require("../core/error.response");
 const comment_model_1 = __importDefault(require("../models/comment.model"));
+const product_repo_1 = require("../models/repositories/product.repo");
 const utils_1 = require("../utils");
 /*
     key features: Comment Service
@@ -37,7 +38,6 @@ class CommentService {
                 if (!parentComment) {
                     throw new error_response_1.NotFoundError(`Component Parent not found!`);
                 }
-                console.log(parentComment);
                 rightValue = parentComment.comment_right;
                 // update many comments
                 yield comment_model_1.default.updateMany({
@@ -113,6 +113,50 @@ class CommentService {
                 comment_left: 1,
             });
             return comments;
+        });
+    }
+    // Delete
+    static deleteComment({ productId, commentId }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Check the product existed in the database
+            const foundProduct = yield (0, product_repo_1.findProduct)({
+                product_id: productId,
+            });
+            if (!foundProduct)
+                throw new error_response_1.NotFoundError('Product not found!');
+            //1. Detect value left & right of comment
+            const comment = yield comment_model_1.default.findById(commentId);
+            if (!comment)
+                throw new error_response_1.NotFoundError('Comment not found!');
+            const { comment_left, comment_right } = comment;
+            // 2. Calculate width of comment
+            const width = comment_right - comment_left + 1;
+            // 3. Delete all children comment of delete comment
+            yield comment_model_1.default.deleteMany({
+                comment_productId: (0, utils_1.convertToObjectIdMongodb)(productId),
+                comment_left: {
+                    $gte: comment_left,
+                    $lte: comment_right,
+                },
+            });
+            // 4. Update value of right & left
+            yield comment_model_1.default.updateMany({
+                comment_productId: (0, utils_1.convertToObjectIdMongodb)(productId),
+                comment_right: { $gt: comment_right },
+            }, {
+                $inc: {
+                    comment_right: -width,
+                },
+            });
+            yield comment_model_1.default.updateMany({
+                comment_productId: (0, utils_1.convertToObjectIdMongodb)(productId),
+                comment_right: { $lt: comment_right },
+            }, {
+                $inc: {
+                    comment_left: -width,
+                },
+            });
+            return true;
         });
     }
 }

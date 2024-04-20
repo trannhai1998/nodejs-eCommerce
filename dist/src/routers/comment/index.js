@@ -12,4 +12,5 @@ const router = express_1.default.Router();
 router.use(authUtils_1.authenticationV2);
 router.post('', (0, asyncHandler_1.asyncHandler)(comment_controller_1.default.createComment));
 router.get('', (0, asyncHandler_1.asyncHandler)(comment_controller_1.default.getCommentsByParentId));
+router.delete('', (0, asyncHandler_1.asyncHandler)(comment_controller_1.default.deleteComment));
 exports.default = router;

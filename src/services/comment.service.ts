@@ -1,5 +1,6 @@
 import { NotFoundError } from '../core/error.response';
 import CommentModel from '../models/comment.model';
+import { findProduct } from '../models/repositories/product.repo';
 import { convertToObjectIdMongodb } from '../utils';
 
 /*
@@ -29,7 +30,6 @@ class CommentService {
 			if (!parentComment) {
 				throw new NotFoundError(`Component Parent not found!`);
 			}
-			console.log(parentComment);
 			rightValue = parentComment.comment_right;
 			// update many comments
 			await CommentModel.updateMany(
@@ -124,6 +124,57 @@ class CommentService {
 			});
 
 		return comments;
+	}
+
+	// Delete
+	static async deleteComment({ productId, commentId }) {
+		// Check the product existed in the database
+		const foundProduct = await findProduct({
+			product_id: productId,
+		});
+
+		if (!foundProduct) throw new NotFoundError('Product not found!');
+		//1. Detect value left & right of comment
+		const comment = await CommentModel.findById(commentId);
+		if (!comment) throw new NotFoundError('Comment not found!');
+
+		const { comment_left, comment_right } = comment;
+		// 2. Calculate width of comment
+		const width = comment_right - comment_left + 1;
+		// 3. Delete all children comment of delete comment
+		await CommentModel.deleteMany({
+			comment_productId: convertToObjectIdMongodb(productId),
+			comment_left: {
+				$gte: comment_left,
+				$lte: comment_right,
+			},
+		});
+		// 4. Update value of right & left
+		await CommentModel.updateMany(
+			{
+				comment_productId: convertToObjectIdMongodb(productId),
+				comment_right: { $gt: comment_right },
+			},
+			{
+				$inc: {
+					comment_right: -width,
+				},
+			},
+		);
+
+		await CommentModel.updateMany(
+			{
+				comment_productId: convertToObjectIdMongodb(productId),
+				comment_right: { $lt: comment_right },
+			},
+			{
+				$inc: {
+					comment_left: -width,
+				},
+			},
+		);
+
+		return true;
 	}
 }
 
